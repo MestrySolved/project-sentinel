@@ -1,6 +1,3 @@
-# project-sentinel
-An autonomous, multi-agent AI orchestrator for cost-compliant GCP infrastructure provisioning.
-
 # Project Sentinel: The Future of Infrastructure is Agentic 🚀
 
 **Infrastructure as Code just got an upgrade to Infrastructure as Agents.** Project Sentinel is an autonomous, multi-agent "Crew" designed to solve the two biggest headaches in cloud engineering: **Manual Toil** and **Budget Drift.** By orchestrating **Google Gemini**, **Claude 3.5**, and **E2B sandboxed runtimes**, this system allows users to provision complex GCP resources using natural language while maintaining 100% budget compliance—autonomously.
