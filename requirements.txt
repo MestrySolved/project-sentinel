@@ -1,0 +1,6 @@
+crewai
+langchain-google-genai
+anthropic
+e2b
+python-dotenv
+pygithub
