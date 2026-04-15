@@ -8,19 +8,37 @@
 
 ```mermaid
 graph TD
-    A[User Request: 'Create GKE Cluster'] --> B{Planner: Gemini}
-    B -- Checks Budget & Spec --> C[Approved Tech Spec]
-    B -- Over Budget --> Z[Request Denied]
+    %% Input and Analysis Phase
+    A --> B{Architect: Gemini}
+    B -- Ingests Requirements & Log Data --> C
+    B -- Defines Data Storage Strategy --> GCS_Logs
     
-    C --> D[Coder: Claude]
-    D -- Generates HCL Code --> E[E2B Sandbox]
+    %% Generation Phase
+    C --> D
+    D -- Generates HCL: IAM, Svc Acct, GKE, Namespaces --> E
     
+    %% Validation & Version Control
     subgraph Execution_Sandbox
-    E -- Runs 'Terraform Plan' --> F{Success?}
-    F -- No: Errors Found --> D
-    F -- Yes: Validated --> G[Infracost Audit]
+    E -- Runs 'Terraform Init & Plan' --> F{Validation?}
+    F -- Errors Found --> D
+    F -- Success --> GH
     end
     
-    G --> H[Final Approval]
-    H --> I[Push to GitHub PR]
-    H --> J[Store State in GCS]
+    %% Provisioning Phase
+    GH -- Push Code & Open PR --> GPR
+    GPR -- Human Approval Gate --> TA
+    
+    %% GCP Resource Layer
+    subgraph Google_Cloud_Platform [Google Cloud Platform]
+    TA --> IAM
+    IAM --> GKE[GKE Cluster & Namespaces]
+    TA --> ST
+    end
+    
+    %% CI/CD and Monitoring Layer
+    GKE --> CF[Codefresh Pipeline]
+    CF -- Blue-Green Deployment --> PROD
+    
+    PROD --> MON{Monitoring Agent}
+    MON -- Fetches Status API --> GRAF
+    GRAF -- Alert/Health Output --> A
